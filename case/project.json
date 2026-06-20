@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "name": "单位换算器",
+  "slug": "unit-converter",
+  "local_path": "/Users/chenqingwei/外部需求/proj-4a2f9b",
+  "github_url": "https://github.com/kingvid-chan/unit-converter",
+  "preview": {
+    "server": "aliyun-cowork",
+    "deploy_root": "/srv/codingagent/unit-converter",
+    "service_name": "codingagent-unit-converter",
+    "port": 19020,
+    "base_path": "/projects/unit-converter/",
+    "public_url": "https://cqw.life/projects/unit-converter/",
+    "health_path": "/projects/unit-converter/healthz"
+  }
+}
