@@ -1,16 +1,11 @@
-import { useState } from 'react'
 import Header from './components/Header'
 import CategoryTabs from './components/CategoryTabs'
 import ConverterPanel from './components/ConverterPanel'
-import type { Category } from './utils/conversions'
+import { useConverter } from './hooks/useConverter'
 
 function App() {
-  const [category, setCategory] = useState<Category>('length')
-  const [values, setValues] = useState<Record<string, string>>({})
-
-  function handleUnitChange(unitKey: string, value: string) {
-    setValues((prev) => ({ ...prev, [unitKey]: value }))
-  }
+  const { category, values, errors, setCategory, handleUnitChange } =
+    useConverter('length')
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -20,7 +15,7 @@ function App() {
         <ConverterPanel
           category={category}
           values={values}
-          errors={{}}
+          errors={errors}
           onUnitChange={handleUnitChange}
         />
       </main>
