@@ -1,0 +1,202 @@
+{
+  "iteration": "0.0.1",
+  "project": "单位换算器 (unit-converter)",
+  "created_at": "2026-06-21",
+  "technical_stack": {
+    "framework": {
+      "choice": "React 18",
+      "rationale": [
+        "纯前端 SPA，无需路由、无需 SSR，React 函数组件 + Hooks 足以覆盖全部状态管理需求",
+        "生态成熟，社区资源丰富，Vite 对 React 的一流支持",
+        "相比 Vue，React 的 useState/useEffect 模式对实时输入联动场景更直观"
+      ]
+    },
+    "build_tool": {
+      "choice": "Vite 5",
+      "rationale": [
+        "开发服务器极速冷启动，HMR 即时生效",
+        "内置对 base 路径、静态资源哈希的支持",
+        "轻量配置，通过 vite.config.ts 即可完成 basePath 和 Cache-Control 设置"
+      ]
+    },
+    "language": {
+      "choice": "TypeScript 5",
+      "rationale": [
+        "换算逻辑涉及多种单位公式，类型系统可在编译期捕获单位混淆错误",
+        "为后续迭代扩展提供类型安全保障"
+      ]
+    },
+    "css": {
+      "choice": "Tailwind CSS 3",
+      "rationale": [
+        "utility-first 风格，无需手写 CSS 文件即可实现响应式设计",
+        "内置 sm/md/lg 断点，移动端适配零额外成本",
+        "生产构建自动 tree-shake 未使用样式，最终 CSS 极小（<5KB）"
+      ]
+    }
+  },
+  "component_tree": {
+    "description": "单页面应用，无路由。所有 UI 由以下组件树构成：",
+    "tree": [
+      {
+        "name": "App",
+        "role": "根组件，管理全局状态（category、values、baseValue、baseUnit）",
+        "children": [
+          {
+            "name": "Header",
+            "role": "展示标题'单位换算器'和简短描述"
+          },
+          {
+            "name": "CategoryTabs",
+            "role": "三个标签页按钮：长度、重量、温度。点击切换当前换算类别"
+          },
+          {
+            "name": "ConverterPanel",
+            "role": "根据当前 category 渲染对应单位组的输入行。包含实时换算逻辑",
+            "children": [
+              {
+                "name": "UnitRow",
+                "role": "单个单位的输入行：标签（单位符号）+ 数值输入框。支持双向绑定"
+              }
+            ]
+          },
+          {
+            "name": "Footer",
+            "role": "显示版本信息和项目前缀"
+          }
+        ]
+      }
+    ]
+  },
+  "conversion_logic": {
+    "strategy": "锚定单位法：每个类别选一个基准单位，存储上次编辑的单位和数值。当用户修改任一输入框时，先将该值转为基准单位值，再从基准单位值分发计算所有单位的显示值。",
+    "base_units": {
+      "length": "米 (m)",
+      "weight": "千克 (kg)",
+      "temperature": "摄氏度 (°C)"
+    },
+    "precision": {
+      "default": 6,
+      "rationale": "保留6位小数，避免浮点显示过长（如 1.0000000000002），同时保证精度。显示时去除末尾多余零。"
+    },
+    "formulas": {
+      "length": {
+        "米_m": 1,
+        "厘米_cm": 100,
+        "公里_km": 0.001,
+        "英尺_ft": 3.28084,
+        "英寸_in": 39.3701,
+        "英里_mi": 0.000621371
+      },
+      "weight": {
+        "千克_kg": 1,
+        "克_g": 1000,
+        "磅_lb": 2.20462,
+        "盎司_oz": 35.274
+      },
+      "temperature": {
+        "to_base": {
+          "摄氏度_°C": "v => v",
+          "华氏度_°F": "v => (v - 32) * 5 / 9",
+          "开尔文_K": "v => v - 273.15"
+        },
+        "from_base": {
+          "摄氏度_°C": "v => v",
+          "华氏度_°F": "v => v * 9 / 5 + 32",
+          "开尔文_K": "v => v + 273.15"
+        }
+      }
+    },
+    "edge_cases": {
+      "non_numeric": "输入非数字字符时忽略该次更新，保持上一有效值",
+      "negative_kelvin": "当开尔文换算结果 < 0 时，显示红色警告'开尔文不能小于0'，但不阻断其他单位的正常换算",
+      "zero": "正常处理，0 在各单位的换算中均合法",
+      "large_values": "使用 JavaScript Number 原生精度（IEEE 754），极大值（如 1e308）可能导致精度丢失，但不做特殊处理",
+      "empty_input": "清空输入框时所有单位同步清空"
+    }
+  },
+  "state_management": {
+    "approach": "React useState + useCallback，无需引入外部状态库",
+    "states": [
+      {
+        "name": "category",
+        "type": "'length' | 'weight' | 'temperature'",
+        "default": "'length'",
+        "description": "当前选中的换算类别"
+      },
+      {
+        "name": "values",
+        "type": "Record<string, string>",
+        "default": "{}",
+        "description": "每个单位的当前显示值（字符串形式，方便输入框绑定）"
+      },
+      {
+        "name": "baseValue",
+        "type": "number | null",
+        "default": "null",
+        "description": "最后一次有效输入的数值（已转换为基准单位）"
+      },
+      {
+        "name": "baseUnit",
+        "type": "string | null",
+        "default": "null",
+        "description": "最后一次编辑的源单位"
+      }
+    ],
+    "flow": "用户在单位X输入框键入数值 → onChange 解析为 number → 若有效：调用 convert(value, from=X, to=baseUnit) 得到基准值 → 更新 baseValue 和 baseUnit → useEffect 触发：将 baseValue 通过 convert 分发到所有单位 → 更新 values → 所有输入框刷新显示"
+  },
+  "basePath_handling": {
+    "requirement": "部署在 /projects/unit-converter/ 子路径下",
+    "implementation": [
+      "vite.config.ts 设置 base: '/projects/unit-converter/'",
+      "所有静态资源（JS/CSS/图片）自动带此前缀",
+      "index.html 中如有手动引用的资源也使用绝对路径 /projects/unit-converter/xxx"
+    ]
+  },
+  "version_token": {
+    "requirement": "静态资源 URL 必须带 ?v=0.0.1 版本令牌",
+    "implementation": [
+      "Vite 构建时通过 vite.config.ts 的 build.rollupOptions.output 配置为 JS/CSS 文件名添加版本哈希",
+      "同时在 index.html 中的资源引用添加查询参数 ?v=0.0.1",
+      "另外在 vite.config.ts 中使用 transformIndexHtml 插件为所有 <script> 和 <link> 标签的 src/href 追加 ?v=0.0.1"
+    ]
+  },
+  "cache_control": {
+    "requirement": "HTML 文档必须由服务器下发真实 Cache-Control: no-cache HTTP 响应头",
+    "implementation": [
+      "vite.config.ts 中配置 server.headers: { 'Cache-Control': 'no-cache' }（开发模式）",
+      "vite preview 模式下同样生效",
+      "生产部署由 Nginx 配置，文档中注明：location /projects/unit-converter/ { add_header Cache-Control no-cache; }"
+    ]
+  },
+  "responsive_design": {
+    "approach": "Tailwind CSS 响应式工具类",
+    "breakpoints": {
+      "mobile": "< 640px (sm) → 单列布局，输入框全宽",
+      "tablet": "640px - 1024px (md) → 双列布局",
+      "desktop": "> 1024px (lg) → 最大宽度 800px 居中，舒适阅读"
+    }
+  },
+  "risks_and_limitations": [
+    {
+      "risk": "浮点精度",
+      "severity": "low",
+      "mitigation": "使用 Number.toFixed(6) 统一精度，去除末尾零。JS 原生浮点对单位换算精度足够（误差 < 1e-10）"
+    },
+    {
+      "risk": "温度换算循环精度丢失",
+      "severity": "low",
+      "mitigation": "摄氏度作为基准单位，双向换算直接使用精确公式，不做近似"
+    },
+    {
+      "risk": "Vite 开发服务器 Cache-Control 与生产不一致",
+      "severity": "medium",
+      "mitigation": "在 docs/runbook.md 中明确标注 Nginx 配置要求，确保生产环境也下发 no-cache 头"
+    },
+    {
+      "risk": "纯前端项目无后端校验",
+      "severity": "low",
+      "mitigation": "前端输入校验（parseFloat + isNaN）足够；不涉及敏感数据，无安全风险"
+    }
+  ]
+}

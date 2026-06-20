@@ -1,0 +1,153 @@
+{
+  "iteration": "0.0.1",
+  "created_at": "2026-06-21",
+  "tasks": [
+    {
+      "id": "T001",
+      "name": "脚手架：Vite + React + TypeScript 项目初始化",
+      "description": "使用 Vite 创建 React + TypeScript 项目模板，安装 Tailwind CSS 及其 Vite 插件，配置 tailwind.config.js 和 postcss.config.js。验证：npm run dev 可启动空白页面。",
+      "files": [
+        "package.json",
+        "vite.config.ts",
+        "tsconfig.json",
+        "tsconfig.app.json",
+        "tailwind.config.js",
+        "postcss.config.js",
+        "index.html",
+        "src/main.tsx",
+        "src/App.tsx",
+        "src/index.css"
+      ],
+      "verification": "npm run dev 启动，浏览器打开显示空白 React 页面，Tailwind 样式生效",
+      "commit_message": "T001: scaffold Vite + React + TypeScript + Tailwind project"
+    },
+    {
+      "id": "T002",
+      "name": "换算逻辑：长度单位换算",
+      "description": "实现长度类6种单位的换算函数。以米为基准，支持：米(m)、厘米(cm)、公里(km)、英尺(ft)、英寸(in)、英里(mi)。包含 toBase 和 fromBase 两个方向的转换系数。",
+      "files": [
+        "src/utils/conversions.ts",
+        "src/utils/conversions.test.ts"
+      ],
+      "verification": "单元测试覆盖所有长度单位双向换算，精度验证（1米=100厘米，1英尺=12英寸等）",
+      "commit_message": "T002: implement length unit conversion logic (6 units)"
+    },
+    {
+      "id": "T003",
+      "name": "换算逻辑：重量单位换算",
+      "description": "实现重量类4种单位的换算函数。以千克为基准，支持：千克(kg)、克(g)、磅(lb)、盎司(oz)。包含 toBase 和 fromBase 两个方向的转换系数。",
+      "files": [
+        "src/utils/conversions.ts"
+      ],
+      "verification": "单元测试：1kg=1000g，1lb≈0.453592kg，1lb=16oz",
+      "commit_message": "T003: implement weight unit conversion logic (4 units)"
+    },
+    {
+      "id": "T004",
+      "name": "换算逻辑：温度单位换算",
+      "description": "实现温度类3种单位的换算函数。摄氏度(°C)、华氏度(°F)、开尔文(K)。温度换算非简单比例关系，需要偏移量：°F=(°C×9/5)+32，K=°C+273.15。以摄氏度为基准。",
+      "files": [
+        "src/utils/conversions.ts"
+      ],
+      "verification": "单元测试：0°C=32°F=273.15K，100°C=212°F，-273.15°C=0K",
+      "commit_message": "T004: implement temperature unit conversion logic (3 units)"
+    },
+    {
+      "id": "T005",
+      "name": "UI组件：Header 和 CategoryTabs",
+      "description": "实现 Header 组件（标题+描述）和 CategoryTabs 组件（长度/重量/温度三个标签切换）。使用 Tailwind 样式，移动端适配。",
+      "files": [
+        "src/components/Header.tsx",
+        "src/components/CategoryTabs.tsx",
+        "src/App.tsx"
+      ],
+      "verification": "页面显示标题'单位换算器'，三个标签可点击切换，选中态有视觉反馈",
+      "commit_message": "T005: build Header and CategoryTabs components"
+    },
+    {
+      "id": "T006",
+      "name": "UI组件：ConverterPanel 和 UnitRow",
+      "description": "实现换算面板和单位输入行。ConverterPanel 根据当前 category 渲染对应单位列表。UnitRow 包含单位标签和数值输入框。响应式布局：移动端单列，桌面端双列。",
+      "files": [
+        "src/components/ConverterPanel.tsx",
+        "src/components/UnitRow.tsx",
+        "src/App.tsx"
+      ],
+      "verification": "切换类别后显示对应单位输入框，各输入框可独立输入，布局在移动端和桌面端均正常显示",
+      "commit_message": "T006: build ConverterPanel and UnitRow components"
+    },
+    {
+      "id": "T007",
+      "name": "状态管理与实时换算联动",
+      "description": "在 App 组件中实现核心状态管理：category、values、baseValue、baseUnit。实现 handleChange 函数：当用户在任一输入框键入数值时，解析数值，转换为基准单位值，再分发到所有单位。useEffect 驱动自动刷新所有 UnitRow 显示。",
+      "files": [
+        "src/App.tsx",
+        "src/hooks/useConverter.ts"
+      ],
+      "verification": "在长度类输入1米，其他单位自动显示正确换算值；修改任意单位值，所有单位同步更新。输入非数字不崩溃。开尔文<0显示警告。",
+      "commit_message": "T007: wire state management and real-time conversion"
+    },
+    {
+      "id": "T008",
+      "name": "样式完善与响应式打磨",
+      "description": "完善全局样式、Footer 组件、错误/警告提示样式。确保移动端（<640px）单列全宽、平板双列、桌面固定宽度居中。添加颜色方案、输入框 focus 态、hover 效果。",
+      "files": [
+        "src/index.css",
+        "src/components/Footer.tsx",
+        "src/App.tsx",
+        "src/components/UnitRow.tsx"
+      ],
+      "verification": "Chrome DevTools 模拟 iPhone SE / iPad / Desktop 均显示正常，UI 美观无溢出",
+      "commit_message": "T008: polish responsive design and visual styling"
+    },
+    {
+      "id": "T009",
+      "name": "部署配置：basePath、版本令牌、Cache-Control",
+      "description": "配置 vite.config.ts：base 设置为 '/projects/unit-converter/'；transformIndexHtml 为资源添加 ?v=0.0.1 查询参数；服务器 headers 设置 Cache-Control: no-cache。",
+      "files": [
+        "vite.config.ts",
+        "index.html"
+      ],
+      "verification": "npm run build 产物中资源路径以 /projects/unit-converter/ 开头且带 ?v=0.0.1；npm run preview 检查响应头包含 Cache-Control: no-cache",
+      "commit_message": "T009: configure basePath, version token, and Cache-Control header"
+    },
+    {
+      "id": "T010",
+      "name": "自测脚本编写与执行",
+      "description": "编写自测脚本 test/self-test.sh，覆盖：1) 所有换算类型精度验证 2) 边界值测试 3) 开尔文<0检测 4) 构建产物检查（路径前缀、版本令牌、Cache-Control）。运行脚本并通过。",
+      "files": [
+        "test/self-test.sh",
+        "test/conversion.test.ts"
+      ],
+      "verification": "bash test/self-test.sh 全部通过，退出码 0",
+      "commit_message": "T010: add self-test script and verify all checks pass"
+    },
+    {
+      "id": "T011",
+      "name": "文档同步与 handoff 生成",
+      "description": "更新 docs/architecture.md 填入实际技术栈和架构决策。生成 evidence/claude/handoff-0.0.1.json 包含所有 commit SHA 和测试结果。",
+      "files": [
+        "docs/architecture.md",
+        "evidence/claude/handoff-0.0.1.json"
+      ],
+      "verification": "architecture.md 内容完整反映实际架构，handoff 中 ready_for_verification 为 true",
+      "commit_message": "T011: update architecture docs and generate handoff"
+    }
+  ],
+  "task_dependencies": {
+    "description": "T002-T004 可并行开发，其他任务串行依赖",
+    "graph": {
+      "T001": [],
+      "T002": ["T001"],
+      "T003": ["T001"],
+      "T004": ["T001"],
+      "T005": ["T001"],
+      "T006": ["T005"],
+      "T007": ["T002", "T003", "T004", "T006"],
+      "T008": ["T007"],
+      "T009": ["T001"],
+      "T010": ["T008", "T009"],
+      "T011": ["T010"]
+    }
+  }
+}
