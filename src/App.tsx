@@ -1,7 +1,15 @@
+import { useState } from 'react'
+import Header from './components/Header'
+import CategoryTabs from './components/CategoryTabs'
+import type { Category } from './utils/conversions'
+
 function App() {
+  const [category, setCategory] = useState<Category>('length')
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <h1 className="text-2xl font-bold text-center py-8">单位换算器</h1>
+      <Header />
+      <CategoryTabs active={category} onSelect={setCategory} />
     </div>
   )
 }
