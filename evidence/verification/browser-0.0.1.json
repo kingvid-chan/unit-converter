@@ -1,0 +1,93 @@
+{
+  "schema_version": 3,
+  "release_version": "0.0.1",
+  "public_url": "https://cqw.life/projects/unit-converter/",
+  "final_url": "https://cqw.life/projects/unit-converter/",
+  "base_path_ok": true,
+  "pages": [
+    {
+      "ok": true,
+      "url": "https://cqw.life/projects/unit-converter/"
+    },
+    {
+      "ok": true,
+      "url": "https://cqw.life/projects/unit-converter/healthz"
+    }
+  ],
+  "workflow_checks": [
+    {
+      "ok": true,
+      "name": "长度换算",
+      "description": "输入100米，验证所有长度单位双向实时换算：10000厘米、0.1公里、328.08英尺、3937英寸、0.062英里"
+    },
+    {
+      "ok": true,
+      "name": "重量换算",
+      "description": "输入1千克，验证：1000克、2.2046磅、35.274盎司"
+    },
+    {
+      "ok": true,
+      "name": "温度换算",
+      "description": "输入0°C验证32°F/273.15K，输入100°C验证212°F/373.15K"
+    },
+    {
+      "ok": true,
+      "name": "标签页切换",
+      "description": "三个标签页（长度、重量、温度）切换正常，每个标签页独立显示对应单位"
+    },
+    {
+      "ok": true,
+      "name": "CSS静态资源子路径加载",
+      "description": "CSS和JS文件在/projects/unit-converter/assets/路径下正确返回200"
+    },
+    {
+      "ok": true,
+      "name": "尾部斜杠重定向",
+      "description": "/projects/unit-converter → 301 → /projects/unit-converter/"
+    }
+  ],
+  "failed_requests": [],
+  "http_errors": [],
+  "console_errors": [],
+  "static_assets": [
+    {
+      "url": "https://cqw.life/projects/unit-converter/assets/index-1pOnqmkn.js?v=0.0.1",
+      "http_status": 200
+    },
+    {
+      "url": "https://cqw.life/projects/unit-converter/assets/index-CXNko-O7.css?v=0.0.1",
+      "http_status": 200
+    }
+  ],
+  "stylesheets": [
+    {
+      "resolved_url": "https://cqw.life/projects/unit-converter/assets/index-CXNko-O7.css?v=0.0.1",
+      "http_status": 200
+    }
+  ],
+  "asset_probes": [
+    {
+      "url": "https://cqw.life/projects/unit-converter/assets/index-CXNko-O7.css?v=0.0.1",
+      "http_status": 200
+    },
+    {
+      "url": "https://cqw.life/projects/unit-converter/assets/index-1pOnqmkn.js?v=0.0.1",
+      "http_status": 200
+    }
+  ],
+  "document_response_headers": {
+    "Cache-Control": "no-cache",
+    "Content-Type": "text/html",
+    "Content-Length": "499"
+  },
+  "screenshots": [
+    "evidence/verification/length-tab-0.0.1.png",
+    "evidence/verification/temperature-tab-0.0.1.png"
+  ],
+  "visual_review": {
+    "verdict": "pass",
+    "issues": [],
+    "provider": "kimi",
+    "model": "kimi"
+  }
+}

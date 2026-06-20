@@ -1,0 +1,3 @@
+GET /projects/unit-converter/ → 200
+GET /projects/unit-converter/healthz → 200
+Content: ok

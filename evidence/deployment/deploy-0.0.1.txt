@@ -1,0 +1,8 @@
+Deploy: unit-converter 0.0.1
+Server: aliyun-cowork
+Deploy root: /srv/codingagent/unit-converter/dist/
+Method: rsync from local build
+Nginx: alias + try_files, included via snippets/cqw-locations.conf
+curl -sk https://127.0.0.1/projects/unit-converter/ → 200
+curl -sk https://127.0.0.1/projects/unit-converter/healthz → 200
+
