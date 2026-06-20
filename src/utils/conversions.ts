@@ -87,3 +87,44 @@ export function convertWeight(
   const kg = value * WEIGHT_TO_KG[from];
   return kg * KG_TO_WEIGHT[to];
 }
+
+// ============================================================
+// Temperature conversion: all units convert through Celsius (base)
+// Temperature is non-linear with offsets, requires special handling
+// ============================================================
+
+export const TEMPERATURE_UNITS: UnitDef[] = [
+  { key: '°C', label: '摄氏度', symbol: '°C' },
+  { key: '°F', label: '华氏度', symbol: '°F' },
+  { key: 'K', label: '开尔文', symbol: 'K' },
+];
+
+export function convertTemperature(
+  value: number,
+  from: TemperatureUnit,
+  to: TemperatureUnit
+): number {
+  // Step 1: convert from source unit to Celsius
+  let celsius: number;
+  switch (from) {
+    case '°C':
+      celsius = value;
+      break;
+    case '°F':
+      celsius = (value - 32) * (5 / 9);
+      break;
+    case 'K':
+      celsius = value - 273.15;
+      break;
+  }
+
+  // Step 2: convert from Celsius to target unit
+  switch (to) {
+    case '°C':
+      return celsius;
+    case '°F':
+      return celsius * (9 / 5) + 32;
+    case 'K':
+      return celsius + 273.15;
+  }
+}
