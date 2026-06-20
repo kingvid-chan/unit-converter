@@ -53,3 +53,37 @@ export function convertLength(
   const meters = value * LENGTH_TO_METER[from];
   return meters * METER_TO_LENGTH[to];
 }
+
+// ============================================================
+// Weight conversion: all units convert through kilograms (base)
+// ============================================================
+
+export const WEIGHT_UNITS: UnitDef[] = [
+  { key: 'kg', label: '千克', symbol: 'kg' },
+  { key: 'g', label: '克', symbol: 'g' },
+  { key: 'lb', label: '磅', symbol: 'lb' },
+  { key: 'oz', label: '盎司', symbol: 'oz' },
+];
+
+const WEIGHT_TO_KG: Record<WeightUnit, number> = {
+  kg: 1,
+  g: 0.001,
+  lb: 0.45359237,
+  oz: 0.028349523125,
+};
+
+const KG_TO_WEIGHT: Record<WeightUnit, number> = {
+  kg: 1,
+  g: 1000,
+  lb: 1 / 0.45359237,
+  oz: 1 / 0.028349523125,
+};
+
+export function convertWeight(
+  value: number,
+  from: WeightUnit,
+  to: WeightUnit
+): number {
+  const kg = value * WEIGHT_TO_KG[from];
+  return kg * KG_TO_WEIGHT[to];
+}
