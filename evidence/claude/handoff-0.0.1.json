@@ -23,7 +23,7 @@
     { "id": "T008", "name": "样式完善与响应式打磨", "status": "completed", "commit": "a573ec0" },
     { "id": "T009", "name": "部署配置：basePath、版本令牌、Cache-Control", "status": "completed", "commit": "4278c30" },
     { "id": "T010", "name": "自测脚本编写与执行", "status": "completed", "commit": "43485e7" },
-    { "id": "T011", "name": "文档同步与 handoff 生成", "status": "in_progress", "commit": "pending" }
+    { "id": "T011", "name": "文档同步与 handoff 生成", "status": "completed", "commit": "98d8a5a" }
   ],
   "implementation_commits": [
     "211592f",
@@ -35,7 +35,8 @@
     "a49d4e4",
     "1e16918",
     "a573ec0",
-    "43485e7"
+    "43485e7",
+    "98d8a5a"
   ],
   "self_test_command": "bash test/self-test.sh",
   "self_test_result": {
